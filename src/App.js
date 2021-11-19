@@ -5,6 +5,7 @@ import Datatable from "./Datatable";
 function App() {
     const [users, setUsers] = useState([]);
     const [query, setQuery] = useState("");
+    const [searchColumn, setSearchColumn] = useState(["name", "username"]);
     console.log(query);
     useEffect(() => {
         fetch("https://jsonplaceholder.typicode.com/users")
@@ -13,11 +14,15 @@ function App() {
     }, []);
 
     function search(rows) {
-        return rows.filter(
-            (row) =>
-                row.username.toString().toLowerCase().indexOf(query.toLowerCase()) > -1 ||
-                row.email.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
-                row.phone.toLowerCase().indexOf(query.toLowerCase()) > -1
+        const columns = rows[0] && Object.keys(rows[0]);
+        return rows.filter((row) =>
+            columns.some(
+                (column) =>
+                    row[column]
+                        .toString()
+                        .toLowerCase()
+                        .indexOf(query.toLowerCase()) > -1
+            )
         );
     }
     return (
@@ -32,7 +37,6 @@ function App() {
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                 />
-                
             </div>
 
             <div>

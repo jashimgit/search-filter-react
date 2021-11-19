@@ -3,7 +3,7 @@ import React from "react";
 export default function Datatable({ data }) {
     // console.log(data);
     const columns = data[0] && Object.keys(data[0]);
-    console.log(columns)
+    // console.log(columns)
     return (
         <div >
             <table class="table">
@@ -24,9 +24,10 @@ export default function Datatable({ data }) {
                             <td>{user.id}</td>
                             <th scope="row">{user.name}</th>
                             <th scope="row">{user.username}</th>
+                            <td>{user.email}</td>
                             <td>{user.address.street}, {user.address.suite}, {user.address.city}</td>
                             <td>{user.phone}</td>
-                            <td>{user.email}</td>
+                            
                             <td>{user.website}</td>
                             <td>{user.company.name}</td>
                         </tr>
