@@ -6,18 +6,20 @@ import Datatable from "./Datatable";
 function App() {
     const [users, setUsers] = useState([]);
     const [query, setQuery] = useState("");
-    const [searchColumn, setSearchColumn] = useState(["name", "username"]);
-    console.log(query);
+    const [searchByColumn, setSearchByColumn] = useState(["name", "username"]);
+    // get all column names
+    const columns = users[0] && Object.keys(users[0]);
+    
     useEffect(() => {
         fetch("https://jsonplaceholder.typicode.com/users")
             .then((res) => res.json())
             .then((data) => setUsers(data));
     }, []);
 
+    //  search functionality
     function search(rows) {
-        //
-        return rows.filter((row) =>
-            searchColumn.some(
+        const filterdata =  rows.filter((row) =>
+            searchByColumn.some(
                 (column) =>
                     row[column]
                         .toString()
@@ -25,9 +27,11 @@ function App() {
                         .indexOf(query.toLowerCase()) > -1
             )
         );
+        
+        return filterdata;
     }
 
-    const columns = users[0] && Object.keys(users[0]);
+    
     return (
         <div className="container">
             <h3 className="text-center text-primary">Search table</h3>
@@ -35,8 +39,6 @@ function App() {
                 <input
                     className="form-control me-2"
                     type="search"
-                    placeholder="Search"
-                    aria-label="Search"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                 />
@@ -44,15 +46,15 @@ function App() {
             <div>
                 {columns &&
                     columns.map((column) => (
-                        <label className="form-check-label">
+                        <label className="form-check-label px-3">
                             <input
                                 className="form-check-input me-2"
                                 type="checkbox"
-                                checked={searchColumn.includes(column)}
+                                checked={searchByColumn.includes(column)}
                                 onChange={(e) => {
                                     const checked =
-                                        searchColumn.includes(column);
-                                    setSearchColumn((prev) =>
+                                    searchByColumn.includes(column);
+                                    setSearchByColumn((prev) =>
                                         checked
                                             ? prev.filter((sc) => sc !== column)
                                             : [...prev, column]
